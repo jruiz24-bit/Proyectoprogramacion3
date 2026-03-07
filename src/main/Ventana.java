@@ -1,9 +1,11 @@
 package main;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -49,7 +51,7 @@ public class Ventana extends JFrame {
         JMenuItem opt3_mi = new JMenuItem("Cerrar");
         menu1.add(opt3_mi);
 
-        menu1.addSeparator(); // Separador visual
+        menu1.addSeparator(); 
 
         
         JMenu menu2 = new JMenu("Guardar");
@@ -64,8 +66,9 @@ public class Ventana extends JFrame {
         
         
         //this.login();      // Ejercicio 17
-         //this.registro();   // Ejercicio 10
-         this.users();      // Tabla de alumnos
+        //this.registro();   // Ejercicio 10
+        //this.users();      // Tabla de alumnos
+        this.calculadora();
 
         this.setVisible(true);
         this.repaint();
@@ -248,4 +251,57 @@ public class Ventana extends JFrame {
         l.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         return l;
     }
+    
+    
+    public void calculadora() {
+        JPanel panel_users = new JPanel();
+        
+        panel_users.setBounds(250, 50, 500, 600);
+        panel_users.setBackground(Color.decode("#100f10"));
+
+        BorderLayout mi_layout = new BorderLayout();
+        mi_layout.setVgap(20);
+        panel_users.setLayout(mi_layout);
+        
+       
+        this.add(panel_users);
+
+   
+        JLabel field = new JLabel("180.00", SwingConstants.RIGHT);
+        field.setOpaque(true);
+        field.setBackground(Color.white);
+        field.setFont(new Font("Arial", Font.BOLD, 30));
+        field.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+        panel_users.add(field, BorderLayout.NORTH);
+
+   
+        JPanel centro = new JPanel();
+        centro.setBackground(Color.DARK_GRAY);
+        centro.setLayout(new GridLayout(4, 3, 5, 5)); 
+        panel_users.add(centro, BorderLayout.CENTER);
+
+        String[] botones = {"9", "8", "7", "6", "5", "4", "3", "2", "1", "0", ".", "C"};
+
+        for (int i = 0; i < botones.length; i++) {
+            JButton btn = new JButton(botones[i]);
+            btn.setFont(new Font("Arial", Font.BOLD, 22));
+            centro.add(btn);
+        }
+
+      
+        JPanel sidebar = new JPanel();
+        sidebar.setBackground(Color.GRAY);
+        sidebar.setLayout(new GridLayout(6, 1, 5, 5));
+        panel_users.add(sidebar, BorderLayout.EAST);
+
+        String[] botones2 = {"+", "-", "*", "/", "=", "CE"};
+
+        for (int i = 0; i < botones2.length; i++) {
+            JButton btn = new JButton(botones2[i]);
+            btn.setFont(new Font("Arial", Font.BOLD, 22));
+            sidebar.add(btn);
+        }
+    }
+    
+    
 }
