@@ -1,9 +1,10 @@
 package main;
-
+//11/3
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Image;
@@ -68,7 +69,8 @@ public class Ventana extends JFrame {
         //this.login();      // Ejercicio 17
         //this.registro();   // Ejercicio 10
         //this.users();      // Tabla de alumnos
-        this.calculadora();
+        //this.calculadora(); //calculadora
+        this.calculadoraInteres(); // calculadora interes
 
         this.setVisible(true);
         this.repaint();
@@ -303,5 +305,89 @@ public class Ventana extends JFrame {
         }
     }
     
+    
+    public void calculadoraInteres() {
+        
+        JPanel mainPanel = new JPanel();
+        mainPanel.setLayout(new BorderLayout(15, 15));
+        mainPanel.setBounds(250, 50, 500, 520);
+        mainPanel.setBackground(new Color(33, 37, 41)); 
+        this.add(mainPanel);
+
+        
+        JLabel title = new JLabel("Calculadora de Interes", JLabel.LEFT);
+        title.setFont(new Font("Segoe UI", Font.BOLD, 28));
+        title.setForeground(new Color(0, 123, 255)); 
+        mainPanel.add(title, BorderLayout.NORTH);
+
+        
+        JPanel pnlInput = new JPanel();
+        pnlInput.setBackground(new Color(52, 58, 64)); 
+        pnlInput.setLayout(new GridLayout(4, 1, 10, 10));
+        pnlInput.setBorder(BorderFactory.createTitledBorder(
+                BorderFactory.createLineBorder(new Color(0, 123, 255)), "DATOS DE ENTRADA", 
+                TitledBorder.LEFT, TitledBorder.TOP, new Font("Arial", Font.BOLD, 12), Color.WHITE));
+        
+        
+        pnlInput.add(crearFilaInput("Capital Social ($):", new JTextField("1500")));
+        pnlInput.add(crearFilaInput("Tiempo (Años):", new JTextField("2")));
+        pnlInput.add(crearFilaInput("Tasa de Interés (%):", new JTextField("0.1")));
+
+        
+        JPanel pnlButtons = new JPanel(new FlowLayout(FlowLayout.RIGHT, 15, 10));
+        pnlButtons.setOpaque(false);
+        
+        JButton btnCalcular = new JButton("Calcular");
+        btnCalcular.setBackground(new Color(40, 167, 69)); 
+        btnCalcular.setForeground(Color.WHITE);
+        btnCalcular.setFocusPainted(false);
+
+        JButton btnCancelar = new JButton("Cancelar");
+        btnCancelar.setBackground(new Color(220, 53, 69)); 
+        btnCancelar.setForeground(Color.WHITE);
+        btnCancelar.setFocusPainted(false);
+
+        pnlButtons.add(btnCalcular);
+        pnlButtons.add(btnCancelar);
+        pnlInput.add(pnlButtons);
+
+        mainPanel.add(pnlInput, BorderLayout.CENTER);
+
+       
+        JPanel pnlResult = new JPanel();
+        pnlResult.setBackground(new Color(73, 80, 87)); 
+        pnlResult.setLayout(new GridLayout(2, 2, 10, 10));
+        pnlResult.setBorder(BorderFactory.createEmptyBorder(15, 20, 15, 20));
+
+        JLabel lblI = new JLabel("Interés Acumulado:", JLabel.RIGHT);
+        lblI.setForeground(Color.WHITE);
+        pnlResult.add(lblI);
+        
+        JTextField txtI = new JTextField("315.00");
+        txtI.setEditable(false); 
+        pnlResult.add(txtI);
+
+        JLabel lblM = new JLabel("Monto Total Final:", JLabel.RIGHT);
+        lblM.setForeground(Color.WHITE);
+        pnlResult.add(lblM);
+        
+        JTextField txtM = new JTextField("1815.00");
+        txtM.setEditable(false);
+        pnlResult.add(txtM);
+
+        mainPanel.add(pnlResult, BorderLayout.SOUTH);
+    }
+
+    
+    private JPanel crearFilaInput(String texto, JTextField campo) {
+        JPanel panel = new JPanel(new GridLayout(1, 2, 10, 0));
+        panel.setOpaque(false);
+        JLabel lbl = new JLabel(texto, JLabel.RIGHT);
+        lbl.setForeground(Color.WHITE);
+        lbl.setFont(new Font("Arial", Font.PLAIN, 14));
+        panel.add(lbl);
+        panel.add(campo);
+        return panel;
+    }
     
 }
