@@ -78,7 +78,8 @@ public class Ventana extends JFrame {
         //this.calculadora(); //calculadora
         //this.calculadoraInteres(); // calculadora interes
 
-        this.pintar();
+        //this.pintar();
+        pintarcasa();
         
         this.setVisible(true);
         this.repaint();
@@ -445,6 +446,73 @@ public class Ventana extends JFrame {
          this.add(pane);
 
     	
+    }
+    
+    public void pintarcasa() {
+        JPanel pane = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                Graphics2D g2d = (Graphics2D) g;
+
+                
+                g2d.setColor(new Color(204, 255, 255));
+                g2d.fillRect(0, 0, 1000, 700);
+
+                
+                g2d.setColor(new Color(222, 184, 135)); 
+                for (int x = 0; x < 1000; x += 60) { 
+                    g2d.fillRect(x, 420, 35, 140);
+                }
+                g2d.fillRect(0, 460, 1000, 15);
+
+                
+                g2d.setColor(Color.GRAY);
+                g2d.fillRect(620, 160, 60, 120);
+
+                
+                g2d.setColor(Color.RED);
+                int[] xTecho = {240, 500, 760}; 
+                int[] yTecho = {280, 80, 280};  
+                g2d.fillPolygon(xTecho, yTecho, 3);
+
+               
+                g2d.setColor(new Color(240, 230, 140)); 
+                g2d.fillRect(280, 280, 440, 320);
+
+                
+                g2d.setColor(Color.DARK_GRAY);
+                g2d.fillRect(230, 600, 540, 70);
+
+                
+                g2d.setColor(new Color(101, 67, 33)); 
+                g2d.fillRect(340, 340, 140, 260);
+                g2d.setColor(Color.BLACK);
+                g2d.fillOval(455, 470, 10, 10); 
+
+                
+                g2d.setColor(new Color(173, 216, 230)); 
+                g2d.fillRect(540, 360, 140, 140);
+                g2d.setColor(Color.BLACK);
+                g2d.setStroke(new BasicStroke(2));
+                g2d.drawRect(540, 360, 140, 140);
+                g2d.drawLine(610, 360, 610, 500); 
+                g2d.drawLine(540, 430, 680, 430); 
+
+                
+                g2d.setColor(new Color(0, 51, 0)); 
+                g2d.fillRect(0, 540, 1000, 30);
+                g2d.setColor(new Color(60, 110, 50)); 
+                g2d.fillRect(0, 570, 1000, 40);
+                g2d.setColor(new Color(255, 250, 205));
+                g2d.fillRect(0, 610, 1000, 50);
+                g2d.setColor(new Color(139, 69, 19)); 
+                g2d.fillRect(0, 660, 1000, 40);
+            }
+        };
+        pane.setSize(1000, 700);
+        pane.setLocation(0, 0);
+        this.add(pane);
     }
     
     private JPanel crearFilaInput(String texto, JTextField campo) {
