@@ -1,6 +1,6 @@
 package main;
 import java.awt.BasicStroke;
-//12/3
+//19/03
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
@@ -72,14 +72,14 @@ public class Ventana extends JFrame {
 
         
         
-        //this.login();      // Ejercicio 17
+        this.login();      // Ejercicio 17
         //this.registro();   // Ejercicio 10
         //this.users();      // Tabla de alumnos
         //this.calculadora(); //calculadora
         //this.calculadoraInteres(); // calculadora interes
 
         //this.pintar();
-        pintarcasa();
+        //pintarcasa();
         
         this.setVisible(true);
         this.repaint();
@@ -108,7 +108,7 @@ public class Ventana extends JFrame {
             login_container.add(userIcon);
         } catch(Exception e) {}
 
-        JTextField txtUser = new JTextField(" Nombre de usuario");
+        JTextField txtUser = new JTextField();
         txtUser.setBounds(80, 140, 260, 35);
         txtUser.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1)); 
         login_container.add(txtUser);
@@ -142,6 +142,24 @@ public class Ventana extends JFrame {
                 btnAcceder.setBackground(new Color(41, 128, 185));
             }
         });
+
+        btnAcceder.addActionListener(e -> {
+            String user = txtUser.getText().trim();
+            String pass = new String(txtPass.getPassword());
+
+            if (user.isEmpty() || user.contains(" ")) {
+                txtUser.setBorder(BorderFactory.createLineBorder(Color.RED, 2));
+            } else {
+                txtUser.setBorder(BorderFactory.createLineBorder(Color.GREEN, 2));
+            }
+
+            if (pass.length() < 6 || pass.contains(" ")) {
+                txtPass.setBorder(BorderFactory.createLineBorder(Color.RED, 2));
+            } else {
+                txtPass.setBorder(BorderFactory.createLineBorder(Color.GREEN, 2));
+            }
+        });
+
         login_container.add(btnAcceder);
 
         JLabel background = new JLabel();
@@ -156,7 +174,6 @@ public class Ventana extends JFrame {
 
     public void registro() {
         JPanel rgs_container = new JPanel();
-      
         rgs_container.setBounds(300, 40, 420, 580); 
         rgs_container.setBackground(new Color(0, 191, 255)); 
         rgs_container.setLayout(null);
@@ -165,7 +182,6 @@ public class Ventana extends JFrame {
             TitledBorder.CENTER, TitledBorder.TOP));
         this.add(rgs_container);
 
-       
         JLabel lblReg = new JLabel("REGISTRO", SwingConstants.CENTER);
         lblReg.setBounds(110, 20, 200, 50);
         lblReg.setOpaque(true);
@@ -174,14 +190,12 @@ public class Ventana extends JFrame {
         lblReg.setFont(new Font("Impact", Font.PLAIN, 30));
         rgs_container.add(lblReg);
 
-        
         JLabel subNombre = crearEtiqueta("NOMBRE DE USUARIO", 85);
         rgs_container.add(subNombre);
         JTextField txtNombre = new JTextField();
         txtNombre.setBounds(35, 115, 350, 30);
         rgs_container.add(txtNombre);
 
-      
         JLabel subBio = crearEtiqueta("BIOGRAFÍA", 155);
         rgs_container.add(subBio);
         JTextArea bio_text = new JTextArea(); 
@@ -189,7 +203,6 @@ public class Ventana extends JFrame {
         bio_text.setBorder(BorderFactory.createLineBorder(Color.GRAY));
         rgs_container.add(bio_text);
 
-  
         JLabel subPref = crearEtiqueta("PREFERENCIAS", 275);
         rgs_container.add(subPref);
         JCheckBox c1 = new JCheckBox("Dulce"); 
@@ -201,7 +214,6 @@ public class Ventana extends JFrame {
         rgs_container.add(c1); 
         rgs_container.add(c2);
 
-    
         JLabel subTerminos = crearEtiqueta("TÉRMINOS Y CONDICIONES", 345);
         rgs_container.add(subTerminos);
         JRadioButton rb1 = new JRadioButton("Acepto"); 
@@ -217,18 +229,48 @@ public class Ventana extends JFrame {
         rgs_container.add(rb1); 
         rgs_container.add(rb2);
 
-        
         String[] col = {"Camino Real", "Arcoiris", "8 de Octubre"};
         JComboBox<String> combo = new JComboBox<>(col);
         combo.setBounds(35, 415, 350, 30);
         rgs_container.add(combo);
 
-       
         JButton btnReg = new JButton("Crear cuenta");
         btnReg.setBounds(60, 470, 300, 50);
         btnReg.setBackground(Color.WHITE);
         btnReg.setFont(new Font("Arial", Font.BOLD, 16));
         btnReg.setBorder(BorderFactory.createRaisedBevelBorder());
+
+        btnReg.addActionListener(e -> {
+            String nombre = txtNombre.getText().trim();
+            String bio = bio_text.getText().trim();
+
+            if (nombre.isEmpty() || nombre.contains(" ")) {
+                txtNombre.setBorder(BorderFactory.createLineBorder(Color.RED, 2));
+            } else {
+                txtNombre.setBorder(BorderFactory.createLineBorder(Color.GREEN, 2));
+            }
+
+            if (bio.length() > 0 && bio.length() < 5) {
+                bio_text.setBorder(BorderFactory.createLineBorder(Color.RED, 2));
+            } else {
+                bio_text.setBorder(BorderFactory.createLineBorder(Color.GREEN, 2));
+            }
+
+            if (!c1.isSelected() && !c2.isSelected()) {
+                c1.setForeground(Color.RED);
+                c2.setForeground(Color.RED);
+            } else {
+                c1.setForeground(Color.BLACK);
+                c2.setForeground(Color.BLACK);
+            }
+
+            if (!rb1.isSelected()) {
+                rb1.setForeground(Color.RED);
+            } else {
+                rb1.setForeground(Color.BLACK);
+            }
+        });
+
         rgs_container.add(btnReg);
     }
 
