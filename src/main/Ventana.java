@@ -1,6 +1,6 @@
 package main;
 import java.awt.BasicStroke;
-//19/03
+//19/003
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
@@ -147,16 +147,25 @@ public class Ventana extends JFrame {
             String user = txtUser.getText().trim();
             String pass = new String(txtPass.getPassword());
 
-            if (user.isEmpty() || user.contains(" ")) {
-                txtUser.setBorder(BorderFactory.createLineBorder(Color.RED, 2));
-            } else {
+            boolean userOk = user.equals("admin@uabcs.mx");
+            boolean passOk = pass.equals("123456");
+
+            if (userOk) {
                 txtUser.setBorder(BorderFactory.createLineBorder(Color.GREEN, 2));
+            } else {
+                txtUser.setBorder(BorderFactory.createLineBorder(Color.RED, 2));
             }
 
-            if (pass.length() < 6 || pass.contains(" ")) {
-                txtPass.setBorder(BorderFactory.createLineBorder(Color.RED, 2));
-            } else {
+            if (passOk) {
                 txtPass.setBorder(BorderFactory.createLineBorder(Color.GREEN, 2));
+            } else {
+                txtPass.setBorder(BorderFactory.createLineBorder(Color.RED, 2));
+            }
+
+            if (userOk && passOk) {
+                JOptionPane.showMessageDialog(this, "Bienvenido.", "Mensaje", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this, "Usuario o contraseña incorrectos.", "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
 
