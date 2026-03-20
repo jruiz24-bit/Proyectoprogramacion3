@@ -1,6 +1,6 @@
 package main;
+//001
 import java.awt.BasicStroke;
-//19/003
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
@@ -13,7 +13,6 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.font.GraphicAttribute;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -24,7 +23,6 @@ import javax.swing.border.TitledBorder;
 public class Ventana extends JFrame {
 
     public Ventana() {
-       
         this.setSize(1000, 750);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setMinimumSize(new Dimension(200, 200));
@@ -33,7 +31,6 @@ public class Ventana extends JFrame {
         this.setTitle("Gestión Escolar - UABCS");
         this.setLayout(null);
 
-        
         try {
             Image iconImage = ImageIO.read(getClass().getResource("/images/alumno.png"));
             this.setIconImage(iconImage);
@@ -41,51 +38,28 @@ public class Ventana extends JFrame {
             System.err.println("Error al cargar icono: " + e.getMessage());
         }
 
-        
         JMenuBar barra = new JMenuBar();
         this.setJMenuBar(barra);
 
-        
         JMenu menu1 = new JMenu("Archivo");
         barra.add(menu1);
-
-        JMenuItem opt1_mi = new JMenuItem("Abrir");
-        menu1.add(opt1_mi);
-
-        JMenuItem opt2_mi = new JMenuItem("Nuevo");
-        menu1.add(opt2_mi);
-
-        JMenuItem opt3_mi = new JMenuItem("Cerrar");
-        menu1.add(opt3_mi);
-
+        menu1.add(new JMenuItem("Abrir"));
+        menu1.add(new JMenuItem("Nuevo"));
+        menu1.add(new JMenuItem("Cerrar"));
         menu1.addSeparator(); 
 
-        
         JMenu menu2 = new JMenu("Guardar");
         menu1.add(menu2);
+        menu2.add(new JMenuItem("Guardar"));
+        menu2.add(new JMenuItem("Guardar como"));
 
-        JMenuItem opt4_mi = new JMenuItem("Guardar");
-        menu2.add(opt4_mi);
-
-        JMenuItem opt5_mi = new JMenuItem("Guardar como");
-        menu2.add(opt5_mi);
-
-        
-        
-        this.login();      // Ejercicio 17
-        //this.registro();   // Ejercicio 10
-        //this.users();      // Tabla de alumnos
-        //this.calculadora(); //calculadora
-        //this.calculadoraInteres(); // calculadora interes
-
-        //this.pintar();
-        //pintarcasa();
+        // Iniciamos con la vista de login
+        this.login(); 
         
         this.setVisible(true);
         this.repaint();
     }
 
-    
     public void login() {
         JPanel login_container = new JPanel();
         login_container.setSize(400, 500);
@@ -127,40 +101,20 @@ public class Ventana extends JFrame {
         login_container.add(txtPass);
 
         JButton btnAcceder = new JButton("Login");
-        btnAcceder.setBounds(100, 320, 200, 45);
+        btnAcceder.setBounds(100, 300, 200, 45);
         btnAcceder.setBackground(new Color(41, 128, 185));
         btnAcceder.setForeground(Color.WHITE);
         btnAcceder.setFont(new Font("Arial", Font.BOLD, 18));
         btnAcceder.setBorder(BorderFactory.createRaisedBevelBorder());
-
-        btnAcceder.addMouseListener(new MouseAdapter() {
-            public void mouseEntered(MouseEvent e) {
-                btnAcceder.setBackground(new Color(52, 152, 219));
-                btnAcceder.setCursor(new Cursor(Cursor.HAND_CURSOR));
-            }
-            public void mouseExited(MouseEvent e) {
-                btnAcceder.setBackground(new Color(41, 128, 185));
-            }
-        });
-
+        
         btnAcceder.addActionListener(e -> {
             String user = txtUser.getText().trim();
             String pass = new String(txtPass.getPassword());
-
             boolean userOk = user.equals("admin@uabcs.mx");
             boolean passOk = pass.equals("123456");
 
-            if (userOk) {
-                txtUser.setBorder(BorderFactory.createLineBorder(Color.GREEN, 2));
-            } else {
-                txtUser.setBorder(BorderFactory.createLineBorder(Color.RED, 2));
-            }
-
-            if (passOk) {
-                txtPass.setBorder(BorderFactory.createLineBorder(Color.GREEN, 2));
-            } else {
-                txtPass.setBorder(BorderFactory.createLineBorder(Color.RED, 2));
-            }
+            txtUser.setBorder(BorderFactory.createLineBorder(userOk ? Color.GREEN : Color.RED, 2));
+            txtPass.setBorder(BorderFactory.createLineBorder(passOk ? Color.GREEN : Color.RED, 2));
 
             if (userOk && passOk) {
                 JOptionPane.showMessageDialog(this, "Bienvenido.", "Mensaje", JOptionPane.INFORMATION_MESSAGE);
@@ -168,8 +122,23 @@ public class Ventana extends JFrame {
                 JOptionPane.showMessageDialog(this, "Usuario o contraseña incorrectos.", "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
-
         login_container.add(btnAcceder);
+
+        // --- BOTÓN DE NAVEGACIÓN: Ir a Registro ---
+        JButton btnIrRegistro = new JButton("¿No tienes cuenta? Crea una aquí");
+        btnIrRegistro.setBounds(50, 380, 300, 30);
+        btnIrRegistro.setContentAreaFilled(false);
+        btnIrRegistro.setBorderPainted(false);
+        btnIrRegistro.setForeground(Color.BLUE);
+        btnIrRegistro.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        
+        btnIrRegistro.addActionListener(e -> {
+            this.getContentPane().removeAll(); // Limpia la ventana
+            this.registro();                   // Carga el registro
+            this.revalidate();                 // Refresca la estructura
+            this.repaint();                    // Redibuja
+        });
+        login_container.add(btnIrRegistro);
 
         JLabel background = new JLabel();
         background.setBounds(0, 0, 1000, 750);
@@ -180,10 +149,9 @@ public class Ventana extends JFrame {
         } catch(Exception e) { this.getContentPane().setBackground(Color.BLACK); }
     }
 
-
     public void registro() {
         JPanel rgs_container = new JPanel();
-        rgs_container.setBounds(300, 40, 420, 580); 
+        rgs_container.setBounds(300, 40, 420, 620); 
         rgs_container.setBackground(new Color(0, 191, 255)); 
         rgs_container.setLayout(null);
         rgs_container.setBorder(BorderFactory.createTitledBorder(
@@ -215,28 +183,17 @@ public class Ventana extends JFrame {
         JLabel subPref = crearEtiqueta("PREFERENCIAS", 275);
         rgs_container.add(subPref);
         JCheckBox c1 = new JCheckBox("Dulce"); 
-        c1.setBounds(40, 305, 80, 30); 
-        c1.setOpaque(false);
+        c1.setBounds(40, 305, 80, 30); c1.setOpaque(false);
         JCheckBox c2 = new JCheckBox("Salado"); 
-        c2.setBounds(150, 305, 80, 30); 
-        c2.setOpaque(false);
-        rgs_container.add(c1); 
-        rgs_container.add(c2);
+        c2.setBounds(150, 305, 80, 30); c2.setOpaque(false);
+        rgs_container.add(c1); rgs_container.add(c2);
 
         JLabel subTerminos = crearEtiqueta("TÉRMINOS Y CONDICIONES", 345);
         rgs_container.add(subTerminos);
-        JRadioButton rb1 = new JRadioButton("Acepto"); 
-        rb1.setBounds(40, 375, 100, 30); 
-        rb1.setOpaque(false);
-        JRadioButton rb2 = new JRadioButton("Rechazo"); 
-        rb2.setBounds(150, 375, 100, 30); 
-        rb2.setOpaque(false);
-        
-        ButtonGroup bg = new ButtonGroup(); 
-        bg.add(rb1); 
-        bg.add(rb2);
-        rgs_container.add(rb1); 
-        rgs_container.add(rb2);
+        JRadioButton rb1 = new JRadioButton("Acepto"); rb1.setBounds(40, 375, 100, 30); rb1.setOpaque(false);
+        JRadioButton rb2 = new JRadioButton("Rechazo"); rb2.setBounds(150, 375, 100, 30); rb2.setOpaque(false);
+        ButtonGroup bg = new ButtonGroup(); bg.add(rb1); bg.add(rb2);
+        rgs_container.add(rb1); rgs_container.add(rb2);
 
         String[] col = {"Camino Real", "Arcoiris", "8 de Octubre"};
         JComboBox<String> combo = new JComboBox<>(col);
@@ -248,42 +205,25 @@ public class Ventana extends JFrame {
         btnReg.setBackground(Color.WHITE);
         btnReg.setFont(new Font("Arial", Font.BOLD, 16));
         btnReg.setBorder(BorderFactory.createRaisedBevelBorder());
-
+        
         btnReg.addActionListener(e -> {
             String nombre = txtNombre.getText().trim();
-            String bio = bio_text.getText().trim();
-
-            if (nombre.isEmpty() || nombre.contains(" ")) {
-                txtNombre.setBorder(BorderFactory.createLineBorder(Color.RED, 2));
-            } else {
-                txtNombre.setBorder(BorderFactory.createLineBorder(Color.GREEN, 2));
-            }
-
-            if (bio.length() > 0 && bio.length() < 5) {
-                bio_text.setBorder(BorderFactory.createLineBorder(Color.RED, 2));
-            } else {
-                bio_text.setBorder(BorderFactory.createLineBorder(Color.GREEN, 2));
-            }
-
-            if (!c1.isSelected() && !c2.isSelected()) {
-                c1.setForeground(Color.RED);
-                c2.setForeground(Color.RED);
-            } else {
-                c1.setForeground(Color.BLACK);
-                c2.setForeground(Color.BLACK);
-            }
-
-            if (!rb1.isSelected()) {
-                rb1.setForeground(Color.RED);
-            } else {
-                rb1.setForeground(Color.BLACK);
-            }
+            txtNombre.setBorder(BorderFactory.createLineBorder((nombre.isEmpty() || nombre.contains(" ")) ? Color.RED : Color.GREEN, 2));
         });
-
         rgs_container.add(btnReg);
+
+        // --- BOTÓN DE NAVEGACIÓN: Ir a Login ---
+        JButton btnIrLogin = new JButton("Ya tengo cuenta. Ir a login");
+        btnIrLogin.setBounds(60, 540, 300, 30);
+        btnIrLogin.addActionListener(e -> {
+            this.getContentPane().removeAll();
+            this.login();
+            this.revalidate();
+            this.repaint();
+        });
+        rgs_container.add(btnIrLogin);
     }
 
-    
     public void users() {
         JPanel panel_users = new JPanel();
         panel_users.setSize(900, 550);
@@ -298,8 +238,8 @@ public class Ventana extends JFrame {
             {"20231002", "María", "González Pérez", "maria.gonzalez@correo.com", "5", "Industrial", "Editar"}
         };
 
-        JTable table = new JTable(body, head); //
-        JScrollPane scroll = new JScrollPane(table); //
+        JTable table = new JTable(body, head);
+        JScrollPane scroll = new JScrollPane(table);
         scroll.setSize(800, 250);
         scroll.setLocation(50, 100);
         panel_users.add(scroll);
@@ -314,189 +254,98 @@ public class Ventana extends JFrame {
         return l;
     }
     
-    
     public void calculadora() {
         JPanel panel_users = new JPanel();
-        
         panel_users.setBounds(250, 50, 500, 600);
         panel_users.setBackground(Color.decode("#100f10"));
-
-        BorderLayout mi_layout = new BorderLayout();
-        mi_layout.setVgap(20);
-        panel_users.setLayout(mi_layout);
-        
-       
+        panel_users.setLayout(new BorderLayout(0, 20));
         this.add(panel_users);
 
-   
         JLabel field = new JLabel("180.00", SwingConstants.RIGHT);
-        field.setOpaque(true);
-        field.setBackground(Color.white);
+        field.setOpaque(true); field.setBackground(Color.white);
         field.setFont(new Font("Arial", Font.BOLD, 30));
         field.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
         panel_users.add(field, BorderLayout.NORTH);
 
-   
-        JPanel centro = new JPanel();
+        JPanel centro = new JPanel(new GridLayout(4, 3, 5, 5));
         centro.setBackground(Color.DARK_GRAY);
-        centro.setLayout(new GridLayout(4, 3, 5, 5)); 
+        String[] botones = {"9", "8", "7", "6", "5", "4", "3", "2", "1", "0", ".", "C"};
+        for (String b : botones) centro.add(new JButton(b));
         panel_users.add(centro, BorderLayout.CENTER);
 
-        String[] botones = {"9", "8", "7", "6", "5", "4", "3", "2", "1", "0", ".", "C"};
-
-        for (int i = 0; i < botones.length; i++) {
-            JButton btn = new JButton(botones[i]);
-            btn.setFont(new Font("Arial", Font.BOLD, 22));
-            centro.add(btn);
-        }
-
-      
-        JPanel sidebar = new JPanel();
+        JPanel sidebar = new JPanel(new GridLayout(6, 1, 5, 5));
         sidebar.setBackground(Color.GRAY);
-        sidebar.setLayout(new GridLayout(6, 1, 5, 5));
-        panel_users.add(sidebar, BorderLayout.EAST);
-
         String[] botones2 = {"+", "-", "*", "/", "=", "CE"};
-
-        for (int i = 0; i < botones2.length; i++) {
-            JButton btn = new JButton(botones2[i]);
-            btn.setFont(new Font("Arial", Font.BOLD, 22));
-            sidebar.add(btn);
-        }
+        for (String b : botones2) sidebar.add(new JButton(b));
+        panel_users.add(sidebar, BorderLayout.EAST);
     }
     
-    
     public void calculadoraInteres() {
-        
-        JPanel mainPanel = new JPanel();
-        mainPanel.setLayout(new BorderLayout(15, 15));
+        JPanel mainPanel = new JPanel(new BorderLayout(15, 15));
         mainPanel.setBounds(250, 50, 500, 520);
         mainPanel.setBackground(new Color(33, 37, 41)); 
         this.add(mainPanel);
 
-        
         JLabel title = new JLabel("Calculadora de Interes", JLabel.LEFT);
         title.setFont(new Font("Segoe UI", Font.BOLD, 28));
         title.setForeground(new Color(0, 123, 255)); 
         mainPanel.add(title, BorderLayout.NORTH);
 
-        
-        JPanel pnlInput = new JPanel();
+        JPanel pnlInput = new JPanel(new GridLayout(4, 1, 10, 10));
         pnlInput.setBackground(new Color(52, 58, 64)); 
-        pnlInput.setLayout(new GridLayout(4, 1, 10, 10));
-        pnlInput.setBorder(BorderFactory.createTitledBorder(
-                BorderFactory.createLineBorder(new Color(0, 123, 255)), "DATOS DE ENTRADA", 
-                TitledBorder.LEFT, TitledBorder.TOP, new Font("Arial", Font.BOLD, 12), Color.WHITE));
-        
-        
+        pnlInput.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(new Color(0, 123, 255)), "DATOS DE ENTRADA", TitledBorder.LEFT, TitledBorder.TOP, new Font("Arial", Font.BOLD, 12), Color.WHITE));
         pnlInput.add(crearFilaInput("Capital Social ($):", new JTextField("1500")));
         pnlInput.add(crearFilaInput("Tiempo (Años):", new JTextField("2")));
         pnlInput.add(crearFilaInput("Tasa de Interés (%):", new JTextField("0.1")));
 
-        
         JPanel pnlButtons = new JPanel(new FlowLayout(FlowLayout.RIGHT, 15, 10));
         pnlButtons.setOpaque(false);
-        
-        JButton btnCalcular = new JButton("Calcular");
-        btnCalcular.setBackground(new Color(40, 167, 69)); 
-        btnCalcular.setForeground(Color.WHITE);
-        btnCalcular.setFocusPainted(false);
-
-        JButton btnCancelar = new JButton("Cancelar");
-        btnCancelar.setBackground(new Color(220, 53, 69)); 
-        btnCancelar.setForeground(Color.WHITE);
-        btnCancelar.setFocusPainted(false);
-
-        pnlButtons.add(btnCalcular);
-        pnlButtons.add(btnCancelar);
+        pnlButtons.add(new JButton("Calcular"));
+        pnlButtons.add(new JButton("Cancelar"));
         pnlInput.add(pnlButtons);
-
         mainPanel.add(pnlInput, BorderLayout.CENTER);
 
-       
-        JPanel pnlResult = new JPanel();
+        JPanel pnlResult = new JPanel(new GridLayout(2, 2, 10, 10));
         pnlResult.setBackground(new Color(73, 80, 87)); 
-        pnlResult.setLayout(new GridLayout(2, 2, 10, 10));
         pnlResult.setBorder(BorderFactory.createEmptyBorder(15, 20, 15, 20));
-
-        JLabel lblI = new JLabel("Interés Acumulado:", JLabel.RIGHT);
-        lblI.setForeground(Color.WHITE);
-        pnlResult.add(lblI);
-        
-        JTextField txtI = new JTextField("315.00");
-        txtI.setEditable(false); 
-        pnlResult.add(txtI);
-
-        JLabel lblM = new JLabel("Monto Total Final:", JLabel.RIGHT);
-        lblM.setForeground(Color.WHITE);
-        pnlResult.add(lblM);
-        
-        JTextField txtM = new JTextField("1815.00");
-        txtM.setEditable(false);
-        pnlResult.add(txtM);
-
+        pnlResult.add(new JLabel("Interés Acumulado:", JLabel.RIGHT));
+        pnlResult.add(new JTextField("315.00"));
+        pnlResult.add(new JLabel("Monto Total Final:", JLabel.RIGHT));
+        pnlResult.add(new JTextField("1815.00"));
         mainPanel.add(pnlResult, BorderLayout.SOUTH);
     }
 
-    
-    public void pintar()
-    {
+    public void pintar() {
     	 JPanel pane = new JPanel() {
              @Override
              protected void paintComponent(Graphics g) {
                  super.paintComponent(g);
-                 
                  Graphics2D g2d = (Graphics2D) g;
-                 
                  g2d.drawLine(0, 0, 100, 100);
-                 
                  g2d.setColor(Color.MAGENTA);
                  g2d.drawOval(100, 100, 150, 50);
-                 
                  g2d.setColor(Color.GREEN);
                  g2d.setStroke(new BasicStroke(3));
-                 
                  g2d.drawPolygon(new int[] {300,100,500}, new int[] {100,300,300},3);
-                 
                  g2d.drawRect(250, 300, 100, 100);
-                 
                  g2d.drawRoundRect(500, 150, 100, 100, 10, 10);
-                 
                  g2d.drawArc(400, 100, 100, 110, 0, 90);
-                 
                  g2d.setFont(new Font("Arial",Font.BOLD,22));
                  g2d.drawString("HOLA", 100, 100);
-                 
                  g2d.fillOval(500, 50, 50, 50);
-                 
                  g2d.fillPolygon(new int[] {500,300,700}, new int[] {300,500,500},3);
-                 
                  g2d.fillRect(550, 500, 100, 100);
-                 
                  g2d.setColor(Color.RED);
                  g2d.fillRoundRect(500, 500, 100, 100, 10, 10);
-                 
                  g2d.fillArc(450, 150, 100, 100, 0, 300);
-                 
-                 
-                 BufferedImage image;
-				try {
-					image = ImageIO.read(new File("src/images/sol.png"));
+                 try {
+					BufferedImage image = ImageIO.read(new File("src/images/sol.png"));
 					g2d.drawImage(image, 0, 0, null);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-                 
-                 
-                 
+				} catch (IOException e) { e.printStackTrace(); }
              }
          };
          pane.setSize(1000, 700);
-         pane.setLocation(0,0);
          this.add(pane);
-
-    	
     }
     
     public void pintarcasa() {
@@ -505,64 +354,29 @@ public class Ventana extends JFrame {
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
                 Graphics2D g2d = (Graphics2D) g;
-
-                
                 g2d.setColor(new Color(204, 255, 255));
                 g2d.fillRect(0, 0, 1000, 700);
-
-                
                 g2d.setColor(new Color(222, 184, 135)); 
-                for (int x = 0; x < 1000; x += 60) { 
-                    g2d.fillRect(x, 420, 35, 140);
-                }
+                for (int x = 0; x < 1000; x += 60) g2d.fillRect(x, 420, 35, 140);
                 g2d.fillRect(0, 460, 1000, 15);
-
-                
-                g2d.setColor(Color.GRAY);
-                g2d.fillRect(620, 160, 60, 120);
-
-                
+                g2d.setColor(Color.GRAY); g2d.fillRect(620, 160, 60, 120);
                 g2d.setColor(Color.RED);
-                int[] xTecho = {240, 500, 760}; 
-                int[] yTecho = {280, 80, 280};  
-                g2d.fillPolygon(xTecho, yTecho, 3);
-
-               
-                g2d.setColor(new Color(240, 230, 140)); 
-                g2d.fillRect(280, 280, 440, 320);
-
-                
-                g2d.setColor(Color.DARK_GRAY);
-                g2d.fillRect(230, 600, 540, 70);
-
-                
-                g2d.setColor(new Color(101, 67, 33)); 
-                g2d.fillRect(340, 340, 140, 260);
-                g2d.setColor(Color.BLACK);
-                g2d.fillOval(455, 470, 10, 10); 
-
-                
-                g2d.setColor(new Color(173, 216, 230)); 
-                g2d.fillRect(540, 360, 140, 140);
-                g2d.setColor(Color.BLACK);
-                g2d.setStroke(new BasicStroke(2));
+                g2d.fillPolygon(new int[] {240, 500, 760}, new int[] {280, 80, 280}, 3);
+                g2d.setColor(new Color(240, 230, 140)); g2d.fillRect(280, 280, 440, 320);
+                g2d.setColor(Color.DARK_GRAY); g2d.fillRect(230, 600, 540, 70);
+                g2d.setColor(new Color(101, 67, 33)); g2d.fillRect(340, 340, 140, 260);
+                g2d.setColor(Color.BLACK); g2d.fillOval(455, 470, 10, 10); 
+                g2d.setColor(new Color(173, 216, 230)); g2d.fillRect(540, 360, 140, 140);
+                g2d.setColor(Color.BLACK); g2d.setStroke(new BasicStroke(2));
                 g2d.drawRect(540, 360, 140, 140);
-                g2d.drawLine(610, 360, 610, 500); 
-                g2d.drawLine(540, 430, 680, 430); 
-
-                
-                g2d.setColor(new Color(0, 51, 0)); 
-                g2d.fillRect(0, 540, 1000, 30);
-                g2d.setColor(new Color(60, 110, 50)); 
-                g2d.fillRect(0, 570, 1000, 40);
-                g2d.setColor(new Color(255, 250, 205));
-                g2d.fillRect(0, 610, 1000, 50);
-                g2d.setColor(new Color(139, 69, 19)); 
-                g2d.fillRect(0, 660, 1000, 40);
+                g2d.drawLine(610, 360, 610, 500); g2d.drawLine(540, 430, 680, 430); 
+                g2d.setColor(new Color(0, 51, 0)); g2d.fillRect(0, 540, 1000, 30);
+                g2d.setColor(new Color(60, 110, 50)); g2d.fillRect(0, 570, 1000, 40);
+                g2d.setColor(new Color(255, 250, 205)); g2d.fillRect(0, 610, 1000, 50);
+                g2d.setColor(new Color(139, 69, 19)); g2d.fillRect(0, 660, 1000, 40);
             }
         };
         pane.setSize(1000, 700);
-        pane.setLocation(0, 0);
         this.add(pane);
     }
     
@@ -576,5 +390,4 @@ public class Ventana extends JFrame {
         panel.add(campo);
         return panel;
     }
-    
 }
