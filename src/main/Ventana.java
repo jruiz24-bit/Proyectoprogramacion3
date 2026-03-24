@@ -1,5 +1,5 @@
 package main;
-//001
+//23/03
 import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -11,6 +11,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.RenderingHints;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
@@ -53,8 +54,9 @@ public class Ventana extends JFrame {
         menu2.add(new JMenuItem("Guardar"));
         menu2.add(new JMenuItem("Guardar como"));
 
-        // Iniciamos con la vista de login
-        this.login(); 
+        
+        //this.login(); 
+        this.dibujarMario();
         
         this.setVisible(true);
         this.repaint();
@@ -377,6 +379,76 @@ public class Ventana extends JFrame {
             }
         };
         pane.setSize(1000, 700);
+        this.add(pane);
+    }
+    
+    public void dibujarMario() {
+        JPanel pane = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                Graphics2D g2d = (Graphics2D) g;
+                g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+                
+                g2d.setColor(new Color(107, 140, 255));
+                g2d.fillRect(0, 0, 1000, 750);
+
+                
+                g2d.setColor(Color.WHITE);
+                
+                g2d.fillOval(100, 100, 60, 60); g2d.fillOval(130, 80, 70, 70); g2d.fillOval(180, 100, 60, 60);
+                
+                g2d.fillOval(600, 150, 60, 60); g2d.fillOval(630, 130, 70, 70); g2d.fillOval(680, 150, 60, 60);
+
+               
+                g2d.setColor(new Color(0, 140, 0));
+                
+                g2d.fillOval(50, 520, 50, 80); g2d.fillOval(80, 500, 60, 100); g2d.fillOval(120, 520, 50, 80);
+                
+                g2d.fillOval(800, 520, 50, 80); g2d.fillOval(830, 500, 60, 100); g2d.fillOval(870, 520, 50, 80);
+
+                
+                g2d.setStroke(new BasicStroke(1));
+                for (int x = 0; x < 1000; x += 40) { 
+                    for (int y = 600; y < 750; y += 40) {
+                        g2d.setColor(new Color(200, 76, 12)); 
+                        g2d.fillRect(x, y, 38, 38);
+                        g2d.setColor(Color.BLACK);
+                        g2d.drawRect(x, y, 38, 38); 
+                    }
+                }
+
+                
+                g2d.setStroke(new BasicStroke(3));
+                g2d.setColor(new Color(0, 168, 0));
+                g2d.fillRect(610, 480, 80, 120);
+                g2d.fillRect(600, 440, 100, 40);
+                g2d.setColor(Color.BLACK);
+                g2d.drawRect(610, 480, 80, 120);
+                g2d.drawRect(600, 440, 100, 40);
+
+                
+                int[] bloquesX = {200, 360, 400, 440, 400};
+                int[] bloquesY = {350, 350, 350, 350, 180};
+                g2d.setFont(new Font("Arial", Font.BOLD, 30));
+
+                for (int i = 0; i < bloquesX.length; i++) {
+                    int bx = bloquesX[i];
+                    int by = bloquesY[i];
+                    g2d.setColor(new Color(255, 160, 64)); 
+                    g2d.fillRect(bx, by, 40, 40);
+                    g2d.setColor(Color.BLACK);
+                    g2d.drawRect(bx, by, 40, 40);
+                    
+                    g2d.fillRect(bx+3, by+3, 4, 4); g2d.fillRect(bx+33, by+3, 4, 4);
+                    g2d.fillRect(bx+3, by+33, 4, 4); g2d.fillRect(bx+33, by+33, 4, 4);
+                    g2d.drawString("?", bx + 12, by + 32);
+                }
+            }
+        };
+        pane.setSize(1000, 750);
+        pane.setLocation(0, 0);
         this.add(pane);
     }
     
