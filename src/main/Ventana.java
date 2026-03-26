@@ -1,5 +1,5 @@
 package main;
-//23/03
+// 26/03 - Ejercicio 6: Navegación desde JMenuBar y Router
 import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -39,6 +39,7 @@ public class Ventana extends JFrame {
             System.err.println("Error al cargar icono: " + e.getMessage());
         }
 
+        // --- CONFIGURACIÓN DE MENÚS ---
         JMenuBar barra = new JMenuBar();
         this.setJMenuBar(barra);
 
@@ -46,20 +47,45 @@ public class Ventana extends JFrame {
         barra.add(menu1);
         menu1.add(new JMenuItem("Abrir"));
         menu1.add(new JMenuItem("Nuevo"));
-        menu1.add(new JMenuItem("Cerrar"));
-        menu1.addSeparator(); 
+        JMenuItem itemSalir = new JMenuItem("Cerrar");
+        itemSalir.addActionListener(e -> System.exit(0));
+        menu1.add(itemSalir);
 
         JMenu menu2 = new JMenu("Guardar");
         menu1.add(menu2);
         menu2.add(new JMenuItem("Guardar"));
         menu2.add(new JMenuItem("Guardar como"));
 
-        
-        //this.login(); 
-        this.dibujarMario();
+        // NUEVO: Menú de Navegación (Ejercicio 6)
+        JMenu menuCuenta = new JMenu("Cuenta");
+        barra.add(menuCuenta);
+
+        JMenuItem itemLogin = new JMenuItem("Iniciar sesión");
+        itemLogin.addActionListener(e -> router("login")); // Usa el router
+        menuCuenta.add(itemLogin);
+
+        JMenuItem itemRegistro = new JMenuItem("Registrarse");
+        itemRegistro.addActionListener(e -> router("registro")); // Usa el router
+        menuCuenta.add(itemRegistro);
+
+        // --- INICIO DE LA APLICACIÓN ---
+        this.router("login"); 
         
         this.setVisible(true);
         this.repaint();
+    }
+
+    // --- FUNCIÓN ROUTER (Centraliza la navegación) ---
+    public void router(String target) {
+        this.getContentPane().removeAll();
+        
+        if(target.equals("login"))
+            this.login();
+        else if(target.equals("registro"))
+            this.registro();
+        
+        this.repaint();
+        this.revalidate();
     }
 
     public void login() {
@@ -126,7 +152,6 @@ public class Ventana extends JFrame {
         });
         login_container.add(btnAcceder);
 
-        // --- BOTÓN DE NAVEGACIÓN: Ir a Registro ---
         JButton btnIrRegistro = new JButton("¿No tienes cuenta? Crea una aquí");
         btnIrRegistro.setBounds(50, 380, 300, 30);
         btnIrRegistro.setContentAreaFilled(false);
@@ -134,12 +159,8 @@ public class Ventana extends JFrame {
         btnIrRegistro.setForeground(Color.BLUE);
         btnIrRegistro.setCursor(new Cursor(Cursor.HAND_CURSOR));
         
-        btnIrRegistro.addActionListener(e -> {
-            this.getContentPane().removeAll(); // Limpia la ventana
-            this.registro();                   // Carga el registro
-            this.revalidate();                 // Refresca la estructura
-            this.repaint();                    // Redibuja
-        });
+        // Uso del Router para navegar
+        btnIrRegistro.addActionListener(e -> router("registro")); 
         login_container.add(btnIrRegistro);
 
         JLabel background = new JLabel();
@@ -214,18 +235,15 @@ public class Ventana extends JFrame {
         });
         rgs_container.add(btnReg);
 
-        // --- BOTÓN DE NAVEGACIÓN: Ir a Login ---
         JButton btnIrLogin = new JButton("Ya tengo cuenta. Ir a login");
         btnIrLogin.setBounds(60, 540, 300, 30);
-        btnIrLogin.addActionListener(e -> {
-            this.getContentPane().removeAll();
-            this.login();
-            this.revalidate();
-            this.repaint();
-        });
+        
+        // Uso del Router para volver
+        btnIrLogin.addActionListener(e -> router("login"));
         rgs_container.add(btnIrLogin);
     }
 
+    // --- ACTIVIDADES PREVIAS PRESERVADAS ---
     public void users() {
         JPanel panel_users = new JPanel();
         panel_users.setSize(900, 550);
@@ -389,26 +407,14 @@ public class Ventana extends JFrame {
                 super.paintComponent(g);
                 Graphics2D g2d = (Graphics2D) g;
                 g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-                
                 g2d.setColor(new Color(107, 140, 255));
                 g2d.fillRect(0, 0, 1000, 750);
-
-                
                 g2d.setColor(Color.WHITE);
-                
                 g2d.fillOval(100, 100, 60, 60); g2d.fillOval(130, 80, 70, 70); g2d.fillOval(180, 100, 60, 60);
-                
                 g2d.fillOval(600, 150, 60, 60); g2d.fillOval(630, 130, 70, 70); g2d.fillOval(680, 150, 60, 60);
-
-               
                 g2d.setColor(new Color(0, 140, 0));
-                
                 g2d.fillOval(50, 520, 50, 80); g2d.fillOval(80, 500, 60, 100); g2d.fillOval(120, 520, 50, 80);
-                
                 g2d.fillOval(800, 520, 50, 80); g2d.fillOval(830, 500, 60, 100); g2d.fillOval(870, 520, 50, 80);
-
-                
                 g2d.setStroke(new BasicStroke(1));
                 for (int x = 0; x < 1000; x += 40) { 
                     for (int y = 600; y < 750; y += 40) {
@@ -418,8 +424,6 @@ public class Ventana extends JFrame {
                         g2d.drawRect(x, y, 38, 38); 
                     }
                 }
-
-                
                 g2d.setStroke(new BasicStroke(3));
                 g2d.setColor(new Color(0, 168, 0));
                 g2d.fillRect(610, 480, 80, 120);
@@ -427,12 +431,9 @@ public class Ventana extends JFrame {
                 g2d.setColor(Color.BLACK);
                 g2d.drawRect(610, 480, 80, 120);
                 g2d.drawRect(600, 440, 100, 40);
-
-                
                 int[] bloquesX = {200, 360, 400, 440, 400};
                 int[] bloquesY = {350, 350, 350, 350, 180};
                 g2d.setFont(new Font("Arial", Font.BOLD, 30));
-
                 for (int i = 0; i < bloquesX.length; i++) {
                     int bx = bloquesX[i];
                     int by = bloquesY[i];
@@ -440,7 +441,6 @@ public class Ventana extends JFrame {
                     g2d.fillRect(bx, by, 40, 40);
                     g2d.setColor(Color.BLACK);
                     g2d.drawRect(bx, by, 40, 40);
-                    
                     g2d.fillRect(bx+3, by+3, 4, 4); g2d.fillRect(bx+33, by+3, 4, 4);
                     g2d.fillRect(bx+3, by+33, 4, 4); g2d.fillRect(bx+33, by+33, 4, 4);
                     g2d.drawString("?", bx + 12, by + 32);
