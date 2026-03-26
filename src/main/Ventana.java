@@ -1,5 +1,5 @@
 package main;
-// 26/03 - Ejercicio 6: Navegación desde JMenuBar y Router
+// 26/03 - Ejercicio 7: Menú de navegación completo con Router
 import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -39,54 +39,79 @@ public class Ventana extends JFrame {
             System.err.println("Error al cargar icono: " + e.getMessage());
         }
 
-        // --- CONFIGURACIÓN DE MENÚS ---
+        // --- BARRA DE MENÚ (JMenuBar) ---
         JMenuBar barra = new JMenuBar();
         this.setJMenuBar(barra);
 
-        JMenu menu1 = new JMenu("Archivo");
-        barra.add(menu1);
-        menu1.add(new JMenuItem("Abrir"));
-        menu1.add(new JMenuItem("Nuevo"));
-        JMenuItem itemSalir = new JMenuItem("Cerrar");
-        itemSalir.addActionListener(e -> System.exit(0));
-        menu1.add(itemSalir);
-
-        JMenu menu2 = new JMenu("Guardar");
-        menu1.add(menu2);
-        menu2.add(new JMenuItem("Guardar"));
-        menu2.add(new JMenuItem("Guardar como"));
-
-        // NUEVO: Menú de Navegación (Ejercicio 6)
+        // 1. Menú Cuenta
         JMenu menuCuenta = new JMenu("Cuenta");
         barra.add(menuCuenta);
+        menuCuenta.add(crearItem("Login", "login"));
+        menuCuenta.add(crearItem("Registro", "registro"));
+        menuCuenta.add(crearItem("Recuperación de cuenta", "recuperar"));
 
-        JMenuItem itemLogin = new JMenuItem("Iniciar sesión");
-        itemLogin.addActionListener(e -> router("login")); // Usa el router
-        menuCuenta.add(itemLogin);
+        // 2. Menú Usuarios
+        JMenu menuUsuarios = new JMenu("Usuarios");
+        barra.add(menuUsuarios);
+        menuUsuarios.add(crearItem("Alta", "alta"));
+        menuUsuarios.add(crearItem("Baja", "baja"));
+        menuUsuarios.add(crearItem("Consultar", "users"));
 
-        JMenuItem itemRegistro = new JMenuItem("Registrarse");
-        itemRegistro.addActionListener(e -> router("registro")); // Usa el router
-        menuCuenta.add(itemRegistro);
+        // 3. Menú Ayuda
+        JMenu menuAyuda = new JMenu("Ayuda");
+        barra.add(menuAyuda);
+        menuAyuda.add(crearItem("¿Cómo crear un usuario?", "ayuda1"));
+        menuAyuda.add(crearItem("¿Cómo acceder al sistema?", "ayuda2"));
+        menuAyuda.add(crearItem("¿Qué pasa si olvidé mi contraseña?", "ayuda3"));
 
-        // --- INICIO DE LA APLICACIÓN ---
-        this.router("login"); 
+        // 4. Menú Actividades (Para tus otros trabajos)
+        JMenu menuAct = new JMenu("Actividades");
+        barra.add(menuAct);
+        menuAct.add(crearItem("Mario Bros", "mario"));
+        menuAct.add(crearItem("Calculadora", "calc"));
+        menuAct.add(crearItem("Calculadora Interés", "interes"));
+        menuAct.add(crearItem("Pintar Figuras", "pintar"));
+        menuAct.add(crearItem("Pintar Casa", "casa"));
+
+        // Carga inicial con el Router
+        this.router("login");
         
         this.setVisible(true);
         this.repaint();
     }
 
-    // --- FUNCIÓN ROUTER (Centraliza la navegación) ---
+    // --- FUNCIÓN ROUTER CENTRALIZADA ---
     public void router(String target) {
         this.getContentPane().removeAll();
         
-        if(target.equals("login"))
-            this.login();
-        else if(target.equals("registro"))
-            this.registro();
+        if(target.equals("login")) this.login();
+        else if(target.equals("registro")) this.registro();
+        else if(target.equals("users")) this.users();
+        else if(target.equals("mario")) this.dibujarMario();
+        else if(target.equals("calc")) this.calculadora();
+        else if(target.equals("interes")) this.calculadoraInteres();
+        else if(target.equals("pintar")) this.pintar();
+        else if(target.equals("casa")) this.pintarcasa();
+        else this.vistaProvisional(target); // Para opciones nuevas sin código aún
         
-        this.repaint();
         this.revalidate();
+        this.repaint();
     }
+
+    private JMenuItem crearItem(String texto, String target) {
+        JMenuItem item = new JMenuItem(texto);
+        item.addActionListener(e -> router(target));
+        return item;
+    }
+
+    private void vistaProvisional(String msg) {
+        JPanel p = new JPanel();
+        p.setSize(1000, 700);
+        p.add(new JLabel("Ventana de: " + msg));
+        this.add(p);
+    }
+
+    // --- TUS FUNCIONES ORIGINALES (SIN CAMBIOS) ---
 
     public void login() {
         JPanel login_container = new JPanel();
@@ -159,8 +184,7 @@ public class Ventana extends JFrame {
         btnIrRegistro.setForeground(Color.BLUE);
         btnIrRegistro.setCursor(new Cursor(Cursor.HAND_CURSOR));
         
-        // Uso del Router para navegar
-        btnIrRegistro.addActionListener(e -> router("registro")); 
+        btnIrRegistro.addActionListener(e -> router("registro")); // Cambiado a Router
         login_container.add(btnIrRegistro);
 
         JLabel background = new JLabel();
@@ -237,13 +261,10 @@ public class Ventana extends JFrame {
 
         JButton btnIrLogin = new JButton("Ya tengo cuenta. Ir a login");
         btnIrLogin.setBounds(60, 540, 300, 30);
-        
-        // Uso del Router para volver
-        btnIrLogin.addActionListener(e -> router("login"));
+        btnIrLogin.addActionListener(e -> router("login")); // Cambiado a Router
         rgs_container.add(btnIrLogin);
     }
 
-    // --- ACTIVIDADES PREVIAS PRESERVADAS ---
     public void users() {
         JPanel panel_users = new JPanel();
         panel_users.setSize(900, 550);
@@ -365,6 +386,7 @@ public class Ventana extends JFrame {
              }
          };
          pane.setSize(1000, 700);
+         pane.setLocation(0, 0);
          this.add(pane);
     }
     
@@ -397,6 +419,7 @@ public class Ventana extends JFrame {
             }
         };
         pane.setSize(1000, 700);
+        pane.setLocation(0, 0);
         this.add(pane);
     }
     
