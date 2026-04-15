@@ -1,5 +1,5 @@
 package main;
-// 26/03 - Ejercicio 7: Menú de navegación completo con Router
+
 import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -39,32 +39,32 @@ public class Ventana extends JFrame {
             System.err.println("Error al cargar icono: " + e.getMessage());
         }
 
-        // --- BARRA DE MENÚ (JMenuBar) ---
+        
         JMenuBar barra = new JMenuBar();
         this.setJMenuBar(barra);
 
-        // 1. Menú Cuenta
+        
         JMenu menuCuenta = new JMenu("Cuenta");
         barra.add(menuCuenta);
         menuCuenta.add(crearItem("Login", "login"));
         menuCuenta.add(crearItem("Registro", "registro"));
         menuCuenta.add(crearItem("Recuperación de cuenta", "recuperar"));
 
-        // 2. Menú Usuarios
+        
         JMenu menuUsuarios = new JMenu("Usuarios");
         barra.add(menuUsuarios);
         menuUsuarios.add(crearItem("Alta", "alta"));
         menuUsuarios.add(crearItem("Baja", "baja"));
         menuUsuarios.add(crearItem("Consultar", "users"));
 
-        // 3. Menú Ayuda
+        
         JMenu menuAyuda = new JMenu("Ayuda");
         barra.add(menuAyuda);
-        menuAyuda.add(crearItem("¿Cómo crear un usuario?", "ayuda1"));
-        menuAyuda.add(crearItem("¿Cómo acceder al sistema?", "ayuda2"));
-        menuAyuda.add(crearItem("¿Qué pasa si olvidé mi contraseña?", "ayuda3"));
+        menuAyuda.add(crearItem("¿Cómo crear un usuario?", "ayuda_crear"));
+        menuAyuda.add(crearItem("¿Cómo acceder al sistema?", "ayuda_acceso"));
+        menuAyuda.add(crearItem("¿Qué pasa si olvidé mi contraseña?", "ayuda_pass"));
 
-        // 4. Menú Actividades (Para tus otros trabajos)
+        
         JMenu menuAct = new JMenu("Actividades");
         barra.add(menuAct);
         menuAct.add(crearItem("Mario Bros", "mario"));
@@ -73,26 +73,46 @@ public class Ventana extends JFrame {
         menuAct.add(crearItem("Pintar Figuras", "pintar"));
         menuAct.add(crearItem("Pintar Casa", "casa"));
 
-        // Carga inicial con el Router
-        this.router("login");
+        //this.login(); 
+        //this.registro();
+        //this.dibujarMario();
+        //this.users();
+        //this.pintar();
+        //this.pintarcasa();
+        //this.calculadora();
+        //this.calculadoraInteres();
+
+        this.router("login"); // Carga inicial
         
         this.setVisible(true);
         this.repaint();
     }
 
-    // --- FUNCIÓN ROUTER CENTRALIZADA ---
+    
     public void router(String target) {
         this.getContentPane().removeAll();
         
+        // Vistas de Cuenta
         if(target.equals("login")) this.login();
         else if(target.equals("registro")) this.registro();
+        else if(target.equals("recuperar")) this.add(new RecuperacionView(this));
+        
+        // Vistas de Usuarios
+        else if(target.equals("alta")) this.add(new AltaUsuarioView(this));
+        else if(target.equals("baja")) this.add(new BajaUsuarioView(this));
         else if(target.equals("users")) this.users();
+        
+        // Vistas de Ayuda
+        else if(target.equals("ayuda_crear")) this.add(new AyudaCrearUsuarioView(this));
+        else if(target.equals("ayuda_acceso")) this.add(new AyudaAccesoSistemaView(this));
+        else if(target.equals("ayuda_pass")) this.add(new AyudaRecuperarContraseñaView(this));
+        
+        // Actividades 
         else if(target.equals("mario")) this.dibujarMario();
         else if(target.equals("calc")) this.calculadora();
         else if(target.equals("interes")) this.calculadoraInteres();
         else if(target.equals("pintar")) this.pintar();
         else if(target.equals("casa")) this.pintarcasa();
-        else this.vistaProvisional(target); // Para opciones nuevas sin código aún
         
         this.revalidate();
         this.repaint();
@@ -104,14 +124,7 @@ public class Ventana extends JFrame {
         return item;
     }
 
-    private void vistaProvisional(String msg) {
-        JPanel p = new JPanel();
-        p.setSize(1000, 700);
-        p.add(new JLabel("Ventana de: " + msg));
-        this.add(p);
-    }
-
-    // --- TUS FUNCIONES ORIGINALES (SIN CAMBIOS) ---
+   
 
     public void login() {
         JPanel login_container = new JPanel();
@@ -184,7 +197,7 @@ public class Ventana extends JFrame {
         btnIrRegistro.setForeground(Color.BLUE);
         btnIrRegistro.setCursor(new Cursor(Cursor.HAND_CURSOR));
         
-        btnIrRegistro.addActionListener(e -> router("registro")); // Cambiado a Router
+        btnIrRegistro.addActionListener(e -> router("registro")); 
         login_container.add(btnIrRegistro);
 
         JLabel background = new JLabel();
@@ -261,7 +274,7 @@ public class Ventana extends JFrame {
 
         JButton btnIrLogin = new JButton("Ya tengo cuenta. Ir a login");
         btnIrLogin.setBounds(60, 540, 300, 30);
-        btnIrLogin.addActionListener(e -> router("login")); // Cambiado a Router
+        btnIrLogin.addActionListener(e -> router("login")); 
         rgs_container.add(btnIrLogin);
     }
 
@@ -484,5 +497,94 @@ public class Ventana extends JFrame {
         panel.add(lbl);
         panel.add(campo);
         return panel;
+    }
+
+    
+
+    class BaseView extends JPanel {
+        public BaseView(String titulo, Ventana parent) {
+            this.setLayout(null);
+            this.setBackground(Color.WHITE);
+            this.setBounds(0, 0, 1000, 700);
+
+            JLabel lblTitulo = new JLabel(titulo, SwingConstants.CENTER);
+            lblTitulo.setFont(new Font("Arial", Font.BOLD, 36));
+            lblTitulo.setBounds(0, 50, 1000, 50);
+            this.add(lblTitulo);
+
+            JButton btnVolver = new JButton("Volver");
+            btnVolver.setBounds(400, 600, 200, 40);
+            btnVolver.addActionListener(e -> parent.router("login"));
+            this.add(btnVolver);
+        }
+    }
+
+    class RecuperacionView extends BaseView {
+        public RecuperacionView(Ventana parent) {
+            super("Recuperación de Cuenta", parent);
+            JLabel info = new JLabel("Ingresa tu correo para recuperar contraseña:");
+            info.setBounds(300, 200, 400, 30);
+            this.add(info);
+            JTextField correo = new JTextField();
+            correo.setBounds(300, 240, 400, 35);
+            this.add(correo);
+            JButton enviar = new JButton("Enviar Correo");
+            enviar.setBounds(400, 300, 200, 40);
+            this.add(enviar);
+        }
+    }
+
+    class AltaUsuarioView extends BaseView {
+        public AltaUsuarioView(Ventana parent) {
+            super("Alta de Usuario", parent);
+            this.add(new JLabel("Nombre:")).setBounds(300, 150, 100, 30);
+            JTextField f1 = new JTextField(); f1.setBounds(300, 180, 400, 30); this.add(f1);
+            this.add(new JLabel("Rol:")).setBounds(300, 220, 100, 30);
+            JComboBox<String> c1 = new JComboBox<>(new String[]{"Admin", "Estudiante"});
+            c1.setBounds(300, 250, 400, 30); this.add(c1);
+            JButton guardar = new JButton("Guardar Usuario");
+            guardar.setBounds(400, 350, 200, 40); this.add(guardar);
+        }
+    }
+
+    class BajaUsuarioView extends BaseView {
+        public BajaUsuarioView(Ventana parent) {
+            super("Baja de Usuario", parent);
+            JLabel info = new JLabel("Selecciona el ID del usuario a eliminar:");
+            info.setBounds(300, 200, 400, 30); this.add(info);
+            JTextField id = new JTextField(); id.setBounds(300, 240, 400, 35); this.add(id);
+            JButton eliminar = new JButton("Eliminar Definitivamente");
+            eliminar.setBackground(Color.RED); eliminar.setForeground(Color.WHITE);
+            eliminar.setBounds(400, 300, 200, 40); this.add(eliminar);
+        }
+    }
+
+    class AyudaView extends BaseView {
+        public AyudaView(String tema, String desc, Ventana parent) {
+            super(tema, parent);
+            JTextArea area = new JTextArea(desc);
+            area.setBounds(200, 150, 600, 300);
+            area.setEditable(false);
+            area.setFont(new Font("Arial", Font.PLAIN, 16));
+            this.add(area);
+        }
+    }
+
+    class AyudaCrearUsuarioView extends AyudaView {
+        public AyudaCrearUsuarioView(Ventana parent) {
+            super("¿Cómo crear un usuario?", "1. Ve al menú Usuarios -> Alta.\n2. Llena el formulario.\n3. Presiona Guardar.", parent);
+        }
+    }
+
+    class AyudaAccesoSistemaView extends AyudaView {
+        public AyudaAccesoSistemaView(Ventana parent) {
+            super("¿Cómo acceder al sistema?", "Ingresa tus credenciales admin@uabcs.mx / 123456 en la pantalla de Login.", parent);
+        }
+    }
+
+    class AyudaRecuperarContraseñaView extends AyudaView {
+        public AyudaRecuperarContraseñaView(Ventana parent) {
+            super("Recuperar Contraseña", "Si olvidaste tu clave, ve a Cuenta -> Recuperación de cuenta.", parent);
+        }
     }
 }
