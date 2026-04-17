@@ -72,6 +72,7 @@ public class Ventana extends JFrame {
         menuAct.add(crearItem("Calculadora Interés", "interes"));
         menuAct.add(crearItem("Pintar Figuras", "pintar"));
         menuAct.add(crearItem("Pintar Casa", "casa"));
+        menuAct.add(crearItem("Paint App", "paint"));
 
         //this.login(); 
         //this.registro();
@@ -84,7 +85,9 @@ public class Ventana extends JFrame {
 
         //this.router("login"); // Carga inicial
         
-        this.router("memorama");
+        //this.router("memorama");
+        
+        this.router("paint");
         this.setVisible(true);
         this.repaint();
     }
@@ -115,6 +118,7 @@ public class Ventana extends JFrame {
         else if(target.equals("pintar")) this.pintar();
         else if(target.equals("casa")) this.pintarcasa();
         else if(target.equals("memorama")) this.add(new Memorama(this));
+        else if(target.equals("paint")) this.add(new PaintView(this));
         
         this.revalidate();
         this.repaint();
