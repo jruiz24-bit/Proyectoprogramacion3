@@ -82,8 +82,9 @@ public class Ventana extends JFrame {
         //this.calculadora();
         //this.calculadoraInteres();
 
-        this.router("login"); // Carga inicial
+        //this.router("login"); // Carga inicial
         
+        this.router("memorama");
         this.setVisible(true);
         this.repaint();
     }
@@ -113,6 +114,7 @@ public class Ventana extends JFrame {
         else if(target.equals("interes")) this.calculadoraInteres();
         else if(target.equals("pintar")) this.pintar();
         else if(target.equals("casa")) this.pintarcasa();
+        else if(target.equals("memorama")) this.add(new Memorama(this));
         
         this.revalidate();
         this.repaint();
