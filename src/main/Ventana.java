@@ -1,5 +1,5 @@
 package main;
-
+//22
 import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -24,10 +24,10 @@ import javax.swing.border.TitledBorder;
 public class Ventana extends JFrame {
 
     public Ventana() {
-        this.setSize(1000, 750);
+        this.setSize(800, 950);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setMinimumSize(new Dimension(200, 200));
-        this.setMaximumSize(new Dimension(1000, 900));
+        this.setMaximumSize(new Dimension(800, 900));
         this.setLocationRelativeTo(null);
         this.setTitle("Gestión Escolar - UABCS");
         this.setLayout(null);
