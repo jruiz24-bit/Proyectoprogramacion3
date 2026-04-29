@@ -16,4 +16,5 @@ public class AuthController {
 	{
 		vista.login();
 	}
+	
 }

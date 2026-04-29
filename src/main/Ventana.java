@@ -75,7 +75,7 @@ public class Ventana extends JFrame {
         menuAct.add(crearItem("Paint App", "paint"));
 
         //this.login(); 
-        //this.registro();
+        this.registro();
         //this.dibujarMario();
         //this.users();
         //this.pintar();

@@ -8,8 +8,11 @@ import java.awt.Image;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
+import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -18,7 +21,11 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
+import javax.swing.JRadioButton;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import javax.swing.border.TitledBorder;
 
 public class authView {
 	
@@ -158,7 +165,7 @@ public class authView {
 	        btnIrRegistro.setCursor(new Cursor(Cursor.HAND_CURSOR));
 	        
 	        
-	        //btnIrRegistro.addActionListener(e -> router("registro")); 
+	        btnIrRegistro.addActionListener(e ->registro()); 
 	        login_container.add(btnIrRegistro);
 
 	        JLabel background = new JLabel();
@@ -175,8 +182,93 @@ public class authView {
 	
 	public void registro()
 	{
+		JFrame ventana  = new JFrame();
+		
+		ventana.setSize(800, 950);
+		ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		ventana.setMinimumSize(new Dimension(200, 200));
+		ventana.setMaximumSize(new Dimension(800, 900));
+		ventana.setLocationRelativeTo(null);
+		ventana.setTitle("Gestión Escolar - UABCS");
+		ventana.setLayout(null);
+		
+		JPanel rgs_container = new JPanel();
+        rgs_container.setBounds(300, 40, 420, 620); 
+        rgs_container.setBackground(new Color(0, 191, 255)); 
+        rgs_container.setLayout(null);
+        rgs_container.setBorder(BorderFactory.createTitledBorder(
+            BorderFactory.createLineBorder(Color.BLACK), "NUEVO USUARIO", 
+            TitledBorder.CENTER, TitledBorder.TOP));
+        ventana.add(rgs_container);
+
+        JLabel lblReg = new JLabel("REGISTRO", SwingConstants.CENTER);
+        lblReg.setBounds(110, 20, 200, 50);
+        lblReg.setOpaque(true);
+        lblReg.setBackground(Color.BLACK);
+        lblReg.setForeground(Color.WHITE);
+        lblReg.setFont(new Font("Impact", Font.PLAIN, 30));
+        rgs_container.add(lblReg);
+
+        JLabel subNombre = crearEtiqueta("NOMBRE DE USUARIO", 85);
+        rgs_container.add(subNombre);
+        JTextField txtNombre = new JTextField();
+        txtNombre.setBounds(35, 115, 350, 30);
+        rgs_container.add(txtNombre);
+
+        JLabel subBio = crearEtiqueta("BIOGRAFÍA", 155);
+        rgs_container.add(subBio);
+        JTextArea bio_text = new JTextArea(); 
+        bio_text.setBounds(35, 185, 350, 80);
+        bio_text.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+        rgs_container.add(bio_text);
+
+        JLabel subPref = crearEtiqueta("PREFERENCIAS", 275);
+        rgs_container.add(subPref);
+        JCheckBox c1 = new JCheckBox("Dulce"); 
+        c1.setBounds(40, 305, 80, 30); c1.setOpaque(false);
+        JCheckBox c2 = new JCheckBox("Salado"); 
+        c2.setBounds(150, 305, 80, 30); c2.setOpaque(false);
+        rgs_container.add(c1); rgs_container.add(c2);
+
+        JLabel subTerminos = crearEtiqueta("TÉRMINOS Y CONDICIONES", 345);
+        rgs_container.add(subTerminos);
+        JRadioButton rb1 = new JRadioButton("Acepto"); rb1.setBounds(40, 375, 100, 30); rb1.setOpaque(false);
+        JRadioButton rb2 = new JRadioButton("Rechazo"); rb2.setBounds(150, 375, 100, 30); rb2.setOpaque(false);
+        ButtonGroup bg = new ButtonGroup(); bg.add(rb1); bg.add(rb2);
+        rgs_container.add(rb1); rgs_container.add(rb2);
+
+        String[] col = {"Camino Real", "Arcoiris", "8 de Octubre"};
+        JComboBox<String> combo = new JComboBox<>(col);
+        combo.setBounds(35, 415, 350, 30);
+        rgs_container.add(combo);
+
+        JButton btnReg = new JButton("Crear cuenta");
+        btnReg.setBounds(60, 470, 300, 50);
+        btnReg.setBackground(Color.WHITE);
+        btnReg.setFont(new Font("Arial", Font.BOLD, 16));
+        btnReg.setBorder(BorderFactory.createRaisedBevelBorder());
+        
+        btnReg.addActionListener(e -> {
+            String nombre = txtNombre.getText().trim();
+            txtNombre.setBorder(BorderFactory.createLineBorder((nombre.isEmpty() || nombre.contains(" ")) ? Color.RED : Color.GREEN, 2));
+        });
+        rgs_container.add(btnReg);
+
+        JButton btnIrLogin = new JButton("Ya tengo cuenta. Ir a login");
+        btnIrLogin.setBounds(60, 540, 300, 30);
+        btnIrLogin.addActionListener(e -> login()); 
+        rgs_container.add(btnIrLogin);		
+        ventana.setVisible(true);
 		
 	}
 
+	private JLabel crearEtiqueta(String texto, int y) {
+        JLabel l = new JLabel(texto, SwingConstants.CENTER);
+        l.setBounds(35, y, 350, 25);
+        l.setBackground(Color.YELLOW);
+        l.setOpaque(true);
+        l.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        return l;
+    }
 }
 
