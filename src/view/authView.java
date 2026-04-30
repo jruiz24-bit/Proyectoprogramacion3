@@ -143,15 +143,24 @@ public class authView {
 	        btnAcceder.addActionListener(e -> {
 	            String user = txtUser.getText().trim();
 	            String pass = new String(txtPass.getPassword());
-	            boolean userOk = user.equals("admin@uabcs.mx");
-	            boolean passOk = pass.equals("123456");
 
-	            txtUser.setBorder(BorderFactory.createLineBorder(userOk ? Color.GREEN : Color.RED, 2));
-	            txtPass.setBorder(BorderFactory.createLineBorder(passOk ? Color.GREEN : Color.RED, 2));
+	            
+	            models.AuthModel auth = new models.AuthModel();
+	            
+	           
+	            boolean accesoPermitido = auth.access(user, pass);
 
-	            if (userOk && passOk) {
-	                JOptionPane.showMessageDialog(ventana, "Bienvenido.", "Mensaje", JOptionPane.INFORMATION_MESSAGE);
+	            if (accesoPermitido) {
+	                txtUser.setBorder(BorderFactory.createLineBorder(Color.GREEN, 2));
+	                txtPass.setBorder(BorderFactory.createLineBorder(Color.GREEN, 2));
+	                JOptionPane.showMessageDialog(ventana, "¡Bienvenido! Conexión a BD exitosa.", "Mensaje", JOptionPane.INFORMATION_MESSAGE);
+	                
+	                // por hacer
+	                // ventana.dispose();
+	                // new HomeView().setVisible(true);
 	            } else {
+	                txtUser.setBorder(BorderFactory.createLineBorder(Color.RED, 2));
+	                txtPass.setBorder(BorderFactory.createLineBorder(Color.RED, 2));
 	                JOptionPane.showMessageDialog(ventana, "Usuario o contraseña incorrectos.", "Error", JOptionPane.ERROR_MESSAGE);
 	            }
 	        });
