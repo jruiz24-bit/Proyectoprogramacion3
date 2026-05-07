@@ -50,4 +50,40 @@ public class AuthModel {
         
         return false;
     }
+    
+    public boolean register(String username, String password, String fullName) {
+        
+        String query = "INSERT INTO usuarios (username, password, nombre_completo) VALUES (?, ?, ?)";
+        
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection conn = DriverManager.getConnection(
+                    "jdbc:mysql://127.0.0.1:3306/basededatos", 
+                    "root", 
+                    "544712986750"
+            );
+            
+            
+            PreparedStatement ps = conn.prepareStatement(query);
+            ps.setString(1, username);
+            ps.setString(2, password);
+            ps.setString(3, fullName);
+            
+            
+            int rows = ps.executeUpdate();
+            
+            ps.close();
+            conn.close();
+            
+            return rows > 0; 
+            
+        } catch (java.sql.SQLIntegrityConstraintViolationException e) {
+            
+            System.err.println("Error: El usuario ya existe.");
+            return false;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }
