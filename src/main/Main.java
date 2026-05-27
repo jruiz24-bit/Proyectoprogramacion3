@@ -6,9 +6,10 @@ public class Main {
      
     	//Ventana miVentana = new Ventana();
     	
-    	AuthController controller = new AuthController();
+    	//AuthController controller = new AuthController();
     	
-    	controller.login();
+    	//controller.login();
     	
+    	Ventana2 miVentana2 = new Ventana2();
     }
 }
